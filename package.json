@@ -1,0 +1,35 @@
+{
+  "name": "backend-with-nodejs-and-expressjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "lint": "eslint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matibarril/Backend-with-NodeJs-and-ExpressJs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matibarril/Backend-with-NodeJs-and-ExpressJs/issues"
+  },
+  "homepage": "https://github.com/matibarril/Backend-with-NodeJs-and-ExpressJs#readme",
+  "devDependencies": {
+    "eslint": "^8.27.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "faker": "^5.5.3",
+    "joi": "^17.7.0",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1"
+  },
+  "dependencies": {
+    "@hapi/boom": "^10.0.0",
+    "express": "^4.18.2"
+  }
+}
