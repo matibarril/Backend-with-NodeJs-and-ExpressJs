@@ -1,21 +1,30 @@
-const express = require ('express');
+const express = require('express');
+const cors = require('cors');
 const routerApi = require('./routes');
-const app = express ();
-const port = 3000;
+const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/errorHandler');
 
-const {logErrors, errorHandler, boomErrorHandler} = require('./middlewares/errorHandler'); 
+
+const app = express();
+const port = 3000;
 
 app.use(express.json());
 
-routerApi (app);
+const whitelist = ['http://localhost:8080', 'https://myapp.co']; //LIsta de dominios con permisos para realizar Request (CORS)
+const options = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Without permission'));
+    }
+  }
+};
+app.use(cors(options));
 
+routerApi(app);
 
-
-app.use(logErrors); // los middlewares de errores después desde el routerApi, donde se usan. Y es importante ver cual de los dos middleware se ejecuta primero. El orden importa.
+app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
 
-
-app.listen(port, () => {
-    console.log('Mi port ' + port);
-});
+app.listen(port, () => {});

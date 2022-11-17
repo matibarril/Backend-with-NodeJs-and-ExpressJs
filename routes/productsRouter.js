@@ -1,64 +1,81 @@
 const express = require('express');
-
-const ProductsService = require ('./../services/productService'); // llamo a la clase que es el sercivio de Services/productservice
-
-const validatorHandler = require ('./../middlewares/validatorHandler');
-const {createProductSchema, updateProductSchema, getProductSchema} = require ('./../schemas/productSchema');
-
-const productsService = new ProductsService(); // instancia de la clase. Es inicializada, el new ejecuta el constructor de la clase. Acá sería el this.product y el this.generete.
+const ProductsService =  require('../services/productService');
+const validatorHandler = require('../middlewares/validatorHandler');
+const { createProductSchema, updateProductSchema, getProductSchema } = require('../schemas/productSchema');
 
 const router = express.Router();
+const productsService = new ProductsService();
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
+  try {
     const products = await productsService.find();
-   // const { size } = req.query;
-    res.json(products);
-    ;
+  res.json(products);
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/filter', (req, res) => {
-    res.send('Yo soy un filter')
-});
-
-router.get('/:id',  
-validatorHandler(getProductSchema, 'params'), // ejecuta este middleware, si esta todo bien sigue al siguiente.
-async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const product = await productsService.findOne(id);
-        res.json(product);
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.post('/', 
-validatorHandler(createProductSchema, 'body'),
-async (req, res) => {
-    const body = req.body;
-    const newProduct = await productsService.create(body);
-    res.status(201).json(newProduct);
-});
-
-router.patch('/:id', 
-validatorHandler(getProductSchema, 'params'),
-validatorHandler(updateProductSchema, 'body'),
-
-async (req, res,next) => {
-    try {
-        const { id } = req.params;
-        const body = req.body;
-        const product = await productsService.update (id, body);
-        res.json(product);
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.delete('/:id', async (req, res) => {
+router.get('/:id',
+  validatorHandler(getProductSchema, 'params'),
+  async (req, res, next) => {
+  try {
     const { id } = req.params;
-    const rta = await productsService.delete(id);
-    res.json(rta);
+    const product = await productsService.findOne(id);
+    res.json(product);
+  } catch (error) {
+    next(error);
+  }
 });
+
+router.post('/',
+  validatorHandler(createProductSchema, 'body'),
+  async (req, res, next) => {
+  try {
+    const body = req.body;
+  const newProduct = await productsService.create(body);
+  res.status(201).json({data: newProduct});
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch('/:id',
+  validatorHandler(getProductSchema, 'params'),
+  validatorHandler(updateProductSchema, 'body'),
+  async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const body = req.body;
+    const product = await productsService.update(id, body);
+    res.json({product});
+  } catch (error) {
+      next(error);
+  }
+});
+
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+  const resp = await productsService.delete(id);
+  res.json({resp});
+  } catch (error) {
+    next(error)
+  }
+});
+
+router.put('/:id', (req, res, next) => {
+  try {
+    const { id } = req.params;
+  const body = req.body;
+  res.json({
+    message: 'update',
+    data: body,
+    id,
+  });
+  } catch (error) {
+    next(error);
+  }
+});
+
 
 module.exports = router;
