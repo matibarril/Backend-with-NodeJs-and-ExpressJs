@@ -1,10 +1,13 @@
-const express = require ('express');
+const express = require('express');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.send ('Hola mi server en express');
+  res.send('Hola putitos');
 });
 
-module.exports= router;
+router.get('/Hola', (req, res) => {
+  res.send('Hola Don Barrilen');
+});
 
-
+module.exports = router;
