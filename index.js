@@ -9,17 +9,19 @@ const port = 3000;
 
 app.use(express.json());
 
-const whitelist = ['http://localhost:8080', 'https://myapp.co']; //LIsta de dominios con permisos para realizar Request (CORS)
+const whitelist = ['http://localhost:8080', 'https://myapp.co'];   //LIsta de dominios con permisos para realizar Request (CORS)
 const options = {
   origin: (origin, callback) => {
-    if (whitelist.includes(origin)) {
+    if (whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Without permission'));
+      callback(new Error('no permitido'));
     }
   }
-};
+}
 app.use(cors(options));
+
+
 
 routerApi(app);
 
