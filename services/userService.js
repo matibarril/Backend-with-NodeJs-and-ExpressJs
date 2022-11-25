@@ -21,7 +21,9 @@ class UserService {
 
     // const query = 'SELECT * FROM tasks';
     // const rta = await this.pool.query(query);
-    const rta = await models.User.findAll();
+    const rta = await models.User.findAll({
+      include: ['customer']
+    });
     return rta;
   }
 
